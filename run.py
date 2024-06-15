@@ -16,26 +16,24 @@ def main():
     )
     logger.setLevel(logging.INFO)
 
-    scenario = input(
-        "Please select a scenario (trello/jira/salesforce): "
-    )
+    scenario = input("Please select a scenario (trello/jira/salesforce): ")
 
     scenario = scenario.lower()
     api_spec, headers = None, None
 
     # database connection details
     db_config = {
-        'host': 'localhost',
-        'database': 'synapse-copilot',
-        'user': 'root',
-        'password': '',
+        "host": "localhost",
+        "database": "synapse-copilot",
+        "user": "root",
+        "password": "",
     }
 
     # Connect to the MySQL server
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor()
+    # conn = mysql.connector.connect(**db_config)
+    # cursor = conn.cursor()
 
-    user_id = int(input("Enter the user id: "))
+    # user_id = int(input("Enter the user id: "))
 
     if scenario == "tmdb":
         os.environ["TMDB_ACCESS_TOKEN"] = config["tmdb_access_token"]
@@ -76,10 +74,7 @@ def main():
                 res_t = res[2]
                 print(f"your token {res_t}")
                 os.environ["GOOGLE_TOKEN"] = res_t
-                dic = {
-                    "user_id": user_id,
-                    "your_token": res_t
-                }
+                dic = {"user_id": user_id, "your_token": res_t}
                 print(dic)
             except:
                 print("Key is not present in the database")
@@ -136,7 +131,7 @@ def main():
                     "user_id": user_id,
                     "user_token": token,
                     "user_host": host,
-                    "user_name": username
+                    "user_name": username,
                 }
                 print(dic)
 
@@ -144,13 +139,13 @@ def main():
                     model="api_selector",
                     scenario=scenario,
                     actual_key=username,
-                    actual_token=token
+                    actual_token=token,
                 )
                 replace_api_credentials(
                     model="planner",
                     scenario=scenario,
                     actual_key=username,
-                    actual_token=token
+                    actual_token=token,
                 )
             except Exception as e:
                 print(f"key is not present in the database due to: {e}")
@@ -161,13 +156,13 @@ def main():
                 scenario=scenario,
                 actual_token=token,
                 actual_host=host,
-                actual_username=username
+                actual_username=username,
             )
             api_spec, headers = process_spec_file(
                 ### to make the specs file minify or smaller for better processing
                 file_path="specs/jira_oas.json",
                 token=token,
-                username=username
+                username=username,
             )
         query_example = "Create a new Project with name 'abc_project'"
 
@@ -184,11 +179,7 @@ def main():
                 os.environ["TRELLO_API_KEY"] = key
                 os.environ["TRELLO_TOKEN"] = token
 
-                dic = {
-                    "user_id": user_id,
-                    "user_key": key,
-                    "user_token": token
-                }
+                dic = {"user_id": user_id, "user_key": key, "user_token": token}
                 print(dic)
             except Exception as e:
                 print(f"Key is not present in the database {e}")
@@ -197,31 +188,35 @@ def main():
             ###to replace all the key and token variables in the specs file with real values
             scenario=scenario,
             actual_key=key,
-            actual_token=token
+            actual_token=token,
         )
-        api_spec, headers = process_spec_file(  ### to make the specs file minfy or smaller for for better processing
-            file_path="specs/trello_oas.json",
-            token=os.environ["TRELLO_TOKEN"],
-            key=os.environ["TRELLO_API_KEY"]
+        api_spec, headers = (
+            process_spec_file(  ### to make the specs file minfy or smaller for for better processing
+                file_path="specs/trello_oas.json",
+                token=os.environ["TRELLO_TOKEN"],
+                key=os.environ["TRELLO_API_KEY"],
+            )
         )
 
         replace_api_credentials(
             model="api_selector",
             scenario=scenario,
             actual_key=os.environ["TRELLO_API_KEY"],
-            actual_token=os.environ["TRELLO_TOKEN"]
+            actual_token=os.environ["TRELLO_TOKEN"],
         )
         replace_api_credentials(
             model="planner",
             scenario=scenario,
             actual_key=os.environ["TRELLO_API_KEY"],
-            actual_token=os.environ["TRELLO_TOKEN"]
+            actual_token=os.environ["TRELLO_TOKEN"],
         )
 
         query_example = "Create a new board with name 'abc_board'"
 
     elif scenario == "salesforce":
-        credentials_fetch_query = f"SELECT * FROM salesforce_credentials WHERE user_id = {user_id};"
+        credentials_fetch_query = (
+            f"SELECT * FROM salesforce_credentials WHERE user_id = {user_id};"
+        )
         cursor.execute(credentials_fetch_query)
         query_result = cursor.fetchone()
 
@@ -243,7 +238,7 @@ def main():
             actual_version=version,
             actual_client_id=client_id,
             actual_client_secret=client_secret,
-            actual_access_token=access_token
+            actual_access_token=access_token,
         )
 
         api_spec, headers = process_spec_file(

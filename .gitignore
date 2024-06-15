@@ -10,6 +10,8 @@ __pycache__/
 .idea/
 **/.idea/
 
+
+
 # databases in project like SQLite, ignore them too
 *.sqlite3
 
@@ -24,3 +26,4 @@ __pycache__/
 *.cache
 *.vscode
 .DS_Store
+

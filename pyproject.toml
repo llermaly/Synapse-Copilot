@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "tu_proyecto"
+version = "0.1.0"
+description = "Descripción de tu proyecto"
+authors = ["Tu Nombre <tu.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyyaml = "6.0.1"
+spotipy = "2.23.0"
+langchain = "0.0.315"
+colorama = "0.4.6"
+tiktoken = "0.5.1"
+openai = "0.28.1"
+mysql = "^0.0.3"
+mysqlclient = "^2.2.4"
+mysql-connector-python = "^8.4.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
