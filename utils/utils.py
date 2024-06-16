@@ -19,7 +19,7 @@ class ColorPrint:
         }
 
     def write(self, data):
-        module = data.split(':')[0]
+        module = data.split(":")[0]
         if module not in self.color_mapping:
             print(data, end="")
         else:
@@ -45,11 +45,11 @@ def get_matched_endpoint(api_spec: ReducedOpenAPISpec, plan: str):
     spec_endpoints = [item[0] for item in api_spec.endpoints]
 
     matched_endpoints = []
-    
+
     print("UTILS: PLAN ENDPOINTS 32:")
     print(plan_endpoints)
     print("\n\n")
-    
+
     print("UTILS: SPEC ENDPOINTS 36:")
     print(spec_endpoints)
     print("\n\n")
@@ -60,7 +60,7 @@ def get_matched_endpoint(api_spec: ReducedOpenAPISpec, plan: str):
             continue
         for name in spec_endpoints:
             arg_list = re.findall(r"[{](.*?)[}]", name)
-            pattern = name.format(**{arg: r"[^/]+" for arg in arg_list}) + '$'
+            pattern = name.format(**{arg: r"[^/]+" for arg in arg_list}) + "$"
             if re.match(pattern, plan_endpoint):
                 matched_endpoints.append(name)
                 break
@@ -70,7 +70,7 @@ def get_matched_endpoint(api_spec: ReducedOpenAPISpec, plan: str):
         # matched_endpoints = ['GET /api/v2/team/9008245063/space', 'Non Genuine']
         # return ['GET /api/v2/team/9008245063/space']
         # raise ValueError(f"Endpoint {plan_endpoint} not found in API spec.")
-    
+
     print("UTILS: MATCHED ENDPOINTS 57:")
     print(matched_endpoints)
     print("\n\n")
@@ -96,6 +96,12 @@ def simplify_json(raw_json: dict):
 
 def fix_json_error(data: str, return_str=True):
     data = data.strip().strip('"').strip(",").strip("`")
+
+    if data.startswith("json"):
+        data = data.split("json")[1].strip()
+
+    print(json.loads(data))
+
     try:
         json.loads(data)
         return data
@@ -104,16 +110,16 @@ def fix_json_error(data: str, return_str=True):
         data = [line.strip() for line in data]
         for i in range(len(data)):
             line = data[i]
-            if line in ['[', ']', '{', '}']:
+            if line in ["[", "]", "{", "}"]:
                 continue
-            if line.endswith(('[', ']', '{', '}')):
+            if line.endswith(("[", "]", "{", "}")):
                 continue
-            if not line.endswith(',') and data[i + 1] not in [']', '}', '],', '},']:
-                data[i] += ','
-            if data[i + 1] in [']', '}', '],', '},'] and line.endswith(','):
+            if not line.endswith(",") and data[i + 1] not in ["]", "}", "],", "},"]:
+                data[i] += ","
+            if data[i + 1] in ["]", "}", "],", "},"] and line.endswith(","):
                 data[i] = line[:-1]
         data = " ".join(data)
-        
+
         if not return_str:
             data = json.loads(data)
         return data

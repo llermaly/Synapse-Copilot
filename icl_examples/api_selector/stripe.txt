@@ -1,0 +1,102 @@
+Example 1:
+Background: No background
+User query: Generate payment link for the price price_1PS6FEBk0CUtnrfuZYMDDe1q with quantity of 5
+API calling 1: POST /v1/payment_links with line_items[0][price] = price_1PS6FEBk0CUtnrfuZYMDDe1q and line_items[0][quantity] = 5 to generate the payment link
+API response: {
+    "id": "plink_1PS8OoBk0CUtnrfuXdGbTuzx",
+    "object": "payment_link",
+    "active": true,
+    "after_completion": {
+        "hosted_confirmation": {
+            "custom_message": null
+        },
+        "type": "hosted_confirmation"
+    },
+    "allow_promotion_codes": false,
+    "application": null,
+    "application_fee_amount": null,
+    "application_fee_percent": null,
+    "automatic_tax": {
+        "enabled": false,
+        "liability": null
+    },
+    "billing_address_collection": "auto",
+    "consent_collection": null,
+    "currency": "usd",
+    "custom_fields": [],
+    "custom_text": {
+        "after_submit": null,
+        "shipping_address": null,
+        "submit": null,
+        "terms_of_service_acceptance": null
+    },
+    "customer_creation": "if_required",
+    "inactive_message": null,
+    "invoice_creation": {
+        "enabled": false,
+        "invoice_data": {
+            "account_tax_ids": null,
+            "custom_fields": null,
+            "description": null,
+            "footer": null,
+            "issuer": null,
+            "metadata": {},
+            "rendering_options": null
+        }
+    },
+    "livemode": false,
+    "metadata": {},
+    "on_behalf_of": null,
+    "payment_intent_data": null,
+    "payment_method_collection": "always",
+    "payment_method_types": null,
+    "phone_number_collection": {
+        "enabled": false
+    },
+    "restrictions": null,
+    "shipping_address_collection": null,
+    "shipping_options": [],
+    "submit_type": "auto",
+    "subscription_data": null,
+    "tax_id_collection": {
+        "enabled": false
+    },
+    "transfer_data": null,
+    "url": "https://buy.stripe.com/test_14kbKW6r7b140P66ow"
+}
+
+
+Example 2:
+Background: No background
+User query: Get the price id for the product 1 Hour of development
+API calling 1: GET /v1/products to get all the products
+API response: {
+    "object": "list",
+    "data": [
+        {
+            "id": "prod_QIheyHBpJyMxsB",
+            "object": "product",
+            "active": true,
+            "attributes": [],
+            "created": 1718494971,
+            "default_price": "price_1PS6FEBk0CUtnrfuZYMDDe1q",
+            "description": "1 Hour of development",
+            "features": [],
+            "images": [],
+            "livemode": false,
+            "marketing_features": [],
+            "metadata": {},
+            "name": "1 Hour of development",
+            "package_dimensions": null,
+            "shippable": null,
+            "statement_descriptor": "1 Hour of development",
+            "tax_code": null,
+            "type": "service",
+            "unit_label": null,
+            "updated": 1718502997,
+            "url": null
+        }
+    ],
+    "has_more": false,
+    "url": "/v1/products"
+}

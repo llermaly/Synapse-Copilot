@@ -9,7 +9,7 @@ from langchain.chains.base import Chain
 from langchain.callbacks.manager import CallbackManagerForChainRun
 from langchain.llms.base import BaseLLM
 
-from langchain.requests import RequestsWrapper
+from req import RequestsWrapper
 
 from .planner import Planner
 from .api_selector import APISelector
@@ -35,20 +35,19 @@ class ApiLLM(Chain):
     early_stopping_method: str = "force"
 
     def __init__(
-            self,
-            llm: BaseLLM,
-            api_spec: ReducedOpenAPISpec,
-            scenario: str,
-            requests_wrapper: RequestsWrapper,
-            caller_doc_with_response: bool = False,
-            parser_with_example: bool = False,
-            simple_parser: bool = False,
-            callback_manager: Optional[BaseCallbackManager] = None,
-            **kwargs: Any,
+        self,
+        llm: BaseLLM,
+        api_spec: ReducedOpenAPISpec,
+        scenario: str,
+        requests_wrapper: RequestsWrapper,
+        caller_doc_with_response: bool = False,
+        parser_with_example: bool = False,
+        simple_parser: bool = False,
+        callback_manager: Optional[BaseCallbackManager] = None,
+        **kwargs: Any,
     ) -> None:
         if scenario not in [
-            "tmdb", "spotify", "stable", "calendar", "notion", "upclick",
-            "discord", "sheets", "trello", "jira", "salesforce", "your_scenario_name"
+            "stripe",
         ]:
             raise ValueError(f"Invalid scenario {scenario}")
 
@@ -56,8 +55,15 @@ class ApiLLM(Chain):
         api_selector = APISelector(llm=llm, scenario=scenario, api_spec=api_spec)
 
         super().__init__(
-            llm=llm, api_spec=api_spec, planner=planner, api_selector=api_selector, scenario=scenario,
-            requests_wrapper=requests_wrapper, simple_parser=simple_parser, callback_manager=callback_manager, **kwargs
+            llm=llm,
+            api_spec=api_spec,
+            planner=planner,
+            api_selector=api_selector,
+            scenario=scenario,
+            requests_wrapper=requests_wrapper,
+            simple_parser=simple_parser,
+            callback_manager=callback_manager,
+            **kwargs,
         )
 
     def save(self, file_path: Union[Path, str]) -> None:
@@ -96,8 +102,8 @@ class ApiLLM(Chain):
         if self.max_iterations is not None and iterations >= self.max_iterations:
             return False
         if (
-                self.max_execution_time is not None
-                and time_elapsed >= self.max_execution_time
+            self.max_execution_time is not None
+            and time_elapsed >= self.max_execution_time
         ):
             return False
 
@@ -112,7 +118,9 @@ class ApiLLM(Chain):
             final_output["intermediate_steps"] = intermediate_steps
         return final_output
 
-    def _get_api_selector_background(self, planner_history: List[Tuple[str, str]]) -> str:
+    def _get_api_selector_background(
+        self, planner_history: List[Tuple[str, str]]
+    ) -> str:
         if len(planner_history) == 0:
             return "No background"
         return "\n".join([step[1] for step in planner_history])
@@ -128,11 +136,11 @@ class ApiLLM(Chain):
         return False
 
     def _call(
-            self,
-            inputs: Dict[str, Any],
-            run_manager: Optional[CallbackManagerForChainRun] = None,
+        self,
+        inputs: Dict[str, Any],
+        run_manager: Optional[CallbackManagerForChainRun] = None,
     ) -> Dict[str, Any]:
-        query = inputs['query']
+        query = inputs["query"]
 
         planner_history: List[Tuple[str, str]] = []
         iterations = 0
@@ -146,13 +154,22 @@ class ApiLLM(Chain):
             tmp_planner_history = [plan]
             api_selector_history: List[Tuple[str, str, str]] = []
             api_selector_background = self._get_api_selector_background(planner_history)
-            api_plan = self.api_selector.run(plan=plan, background=api_selector_background)
+            api_plan = self.api_selector.run(
+                plan=plan, background=api_selector_background
+            )
 
             finished = re.match(r"No API call needed.(.*)", api_plan)
             if not finished:
-                executor = Caller(llm=self.llm, api_spec=self.api_spec, scenario=self.scenario,
-                                  simple_parser=self.simple_parser, requests_wrapper=self.requests_wrapper)
-                execution_res = executor.run(api_plan=api_plan, background=api_selector_background)
+                executor = Caller(
+                    llm=self.llm,
+                    api_spec=self.api_spec,
+                    scenario=self.scenario,
+                    simple_parser=self.simple_parser,
+                    requests_wrapper=self.requests_wrapper,
+                )
+                execution_res = executor.run(
+                    api_plan=api_plan, background=api_selector_background
+                )
             else:
                 execution_res = finished.group(1)
 
@@ -163,15 +180,28 @@ class ApiLLM(Chain):
             logger.info(f"Planner: {plan}")
 
             while self._should_continue_plan(plan):
-                api_selector_background = self._get_api_selector_background(planner_history)
-                api_plan = self.api_selector.run(plan=tmp_planner_history[0], background=api_selector_background,
-                                                 history=api_selector_history, instruction=plan)
+                api_selector_background = self._get_api_selector_background(
+                    planner_history
+                )
+                api_plan = self.api_selector.run(
+                    plan=tmp_planner_history[0],
+                    background=api_selector_background,
+                    history=api_selector_history,
+                    instruction=plan,
+                )
 
                 finished = re.match(r"No API call needed.(.*)", api_plan)
                 if not finished:
-                    executor = Caller(llm=self.llm, api_spec=self.api_spec, scenario=self.scenario,
-                                      simple_parser=self.simple_parser, requests_wrapper=self.requests_wrapper)
-                    execution_res = executor.run(api_plan=api_plan, background=api_selector_background)
+                    executor = Caller(
+                        llm=self.llm,
+                        api_spec=self.api_spec,
+                        scenario=self.scenario,
+                        simple_parser=self.simple_parser,
+                        requests_wrapper=self.requests_wrapper,
+                    )
+                    execution_res = executor.run(
+                        api_plan=api_plan, background=api_selector_background
+                    )
                 else:
                     execution_res = finished.group(1)
 

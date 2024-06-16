@@ -1,0 +1,98 @@
+{
+	"info": {
+		"_postman_id": "aaccbbf9-00fd-4a8c-9251-2e92f12cec5d",
+		"name": "Stripe",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25341034",
+		"_collection_link": "https://lively-meadow-112378.postman.co/workspace/HGI~b2e44575-b102-41de-af16-22d0cc302163/collection/25341034-aaccbbf9-00fd-4a8c-9251-2e92f12cec5d?action=share&source=collection_link&creator=25341034"
+	},
+	"item": [
+		{
+			"name": "Generate Payment Link",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "sk_test_51MyU9SBk0CUtnrfuKc4hd1p6ZsAtXHeyxUayv8D3zzmLBVlzty0Ky32VnctB7lcGIBq4e5LDbHwoszcF1Fdf505h000Bp1VBiY",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "line_items[0][price]",
+							"value": "price_1PS6FEBk0CUtnrfuZYMDDe1q",
+							"type": "text"
+						},
+						{
+							"key": "line_items[0][quantity]",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.stripe.com/v1/payment_links",
+					"protocol": "https",
+					"host": [
+						"api",
+						"stripe",
+						"com"
+					],
+					"path": [
+						"v1",
+						"payment_links"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Products",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "sk_test_51MyU9SBk0CUtnrfuKc4hd1p6ZsAtXHeyxUayv8D3zzmLBVlzty0Ky32VnctB7lcGIBq4e5LDbHwoszcF1Fdf505h000Bp1VBiY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.stripe.com/v1/products",
+					"protocol": "https",
+					"host": [
+						"api",
+						"stripe",
+						"com"
+					],
+					"path": [
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
