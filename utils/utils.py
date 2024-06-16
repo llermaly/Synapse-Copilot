@@ -100,8 +100,6 @@ def fix_json_error(data: str, return_str=True):
     if data.startswith("json"):
         data = data.split("json")[1].strip()
 
-    print(json.loads(data))
-
     try:
         json.loads(data)
         return data
