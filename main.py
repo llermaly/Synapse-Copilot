@@ -3,6 +3,7 @@ from helper import *
 import os
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -15,8 +16,22 @@ logger = logging.getLogger()
 app = FastAPI()
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 class QueryData(BaseModel):
     query: str
+
+
+@app.get("/ping")
+def ping():
+    return {"ok": True}
 
 
 @app.post("/query")
