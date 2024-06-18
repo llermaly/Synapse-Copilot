@@ -1,10 +1,10 @@
 Example 1:
 
-User query: Generate a payment link for "1 Hour of development", the quantity is 5.
-Plan step 1: Get all the products and find the one with name "1 Hour of development"
+User query: Generate a payment link for 5 "Hour of development".
+Plan step 1: Get all the products and find the one with name "Hour of development"
 API response: GET /v1/products to get all the products
-Plan step 2: Continue. Extract the price id for the product with name "1 Hour of development", price id is in the key "default_price".
-API response: The price_id of the product "1 Hour of development" is "price_1PS6FEBk0CUtnrfuZYMDDe1q"
+Plan step 2: Continue. Extract the price id for the product with name "Hour of development", price id is in the key "default_price".
+API response: The price_id of the product "Hour of development" is "price_1PS6FEBk0CUtnrfuZYMDDe1q"
 Plan step 3: Generate a payment link for the price "price_1PS6FEBk0CUtnrfuZYMDDe1q" with quantity 5
 API response: POST /v1/payment_links with line_items[0][price] = price_1PS6FEBk0CUtnrfuZYMDDe1q and line_items[0][quantity] = 5 to generate the payment link
 Thought: I have successfully executed the POST request to create a payment link with the specified product and quantity. The response contains the id and url of the created payment link.
@@ -12,11 +12,11 @@ Final Answer: The payment link has been successfully generated. The ID of the cr
 
 Example 2:
 
-User query: Generate a payment link for "1 Hour of development"
-Plan step 1: Get all the products and find the one with name "1 Hour of development"
+User query: Generate a payment link for "Hour of development"
+Plan step 1: Get all the products and find the one with name "Hour of development"
 API response: GET /v1/products to get all the products
-Plan step 2: Continue. Extract the price id for the product with name "1 Hour of development", price id is in the key "default_price".
-API response: The price_id of the product "1 Hour of development" is "price_1PS6FEBk0CUtnrfuZYMDDe1q"
+Plan step 2: Continue. Extract the price id for the product with name "Hour of development", price id is in the key "default_price".
+API response: The price_id of the product "Hour of development" is "price_1PS6FEBk0CUtnrfuZYMDDe1q"
 Plan step 3: Generate a payment link for the price "price_1PS6FEBk0CUtnrfuZYMDDe1q", the quantity is not specified so will use default "1"
 API response: POST /v1/payment_links with line_items[0][price] = price_1PS6FEBk0CUtnrfuZYMDDe1q and line_items[0][quantity] = 1 to generate the payment link
 Thought: I have successfully executed the POST request to create a payment link with the specified product and quantity. The response contains the id and url of the created payment link.

@@ -10,7 +10,7 @@ load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 STRIPE_KEY = os.getenv("STRIPE_KEY")
-
+MONDAY_KEY = os.getenv("MONDAY_KEY")
 logger = logging.getLogger()
 
 app = FastAPI()
@@ -36,18 +36,39 @@ def ping():
 
 @app.post("/query")
 def run_query(data: QueryData):
-    return {"result": stripe_scenario(data.query)}
+    scenario = None
+
+    if "stripe" in data.query.lower():
+        scenario = "stripe"
+    elif "monday" in data.query.lower():
+        scenario = "monday"
+    else:
+        return {
+            "result": "Unsupported scenario, please specify either stripe or monday"
+        }
+
+    return {"result": run_scenario(data.query, scenario=scenario)}
 
 
-def stripe_scenario(query: str):
-    api_spec, headers = process_spec_file(
-        file_path="specs/stripe_oas.json", token=STRIPE_KEY
-    )
+def run_scenario(query: str, scenario: str):
+    if scenario == "stripe":
+        api_spec, headers = process_spec_file(
+            file_path="specs/stripe_oas.json", token=STRIPE_KEY
+        )
 
-    headers["Content-Type"] = "application/x-www-form-urlencoded"
+        headers["Content-Type"] = "application/x-www-form-urlencoded"
+    elif scenario == "monday":
 
-    populate_api_selector_icl_examples(scenario="stripe")
-    populate_planner_icl_examples(scenario="stripe")
+        api_spec, headers = process_spec_file(
+            file_path="specs/monday_oas.json", token=MONDAY_KEY
+        )
+
+        headers["Content-Type"] = "application/json"
+    else:
+        return "Unsupported scenario"
+
+    populate_api_selector_icl_examples(scenario=scenario)
+    populate_planner_icl_examples(scenario=scenario)
 
     requests_wrapper = Requests(headers=headers)
 
@@ -56,7 +77,7 @@ def stripe_scenario(query: str):
     api_llm = ApiLLM(
         llm,
         api_spec=api_spec,
-        scenario="stripe",
+        scenario=scenario,
         requests_wrapper=requests_wrapper,
         simple_parser=False,
     )
