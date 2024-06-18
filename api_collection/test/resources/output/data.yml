@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: Monday API
+  description: Monday Tasks API
+  version: 6.0.7-beta
+  termsOfService: https://api.monday.com
+servers:
+  - url: https://api.monday.com
+paths:
+  /v2:
+    post:
+      tags:
+        - default
+      summary: Get All Tasks Duration
+      requestBody:
+        content: {}
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: >-
+            eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjM3MjU3NzkwMiwiYWFpIjoxMSwidWlkIjo2MjIzNTI0NywiaWFkIjoiMjAyNC0wNi0xNVQyMzo1MTowNi41NzZaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MjM5NzY4MjAsInJnbiI6InVzZTEifQ.GWqHl1m3wmHmBGQELdUrj7iIAp1i7eBVvBJpZWRZhpo
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}

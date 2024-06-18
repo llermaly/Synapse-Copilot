@@ -2,13 +2,13 @@ from helper import *
 import mysql.connector
 import random
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 logger = logging.getLogger()
 
 
 def main():
-    config = yaml.load(open("config.yaml", "r"), Loader=yaml.FullLoader)
-    os.environ["OPENAI_API_KEY"] = config["openai_api_key"]
 
     logging.basicConfig(
         format="%(message)s",
@@ -36,15 +36,24 @@ def main():
     # user_id = int(input("Enter the user id: "))
 
     if scenario == "stripe":
-        os.environ["STRIPE_KEY"] = config["STRIPE_KEY"]
 
         api_spec, headers = process_spec_file(
-            file_path="specs/stripe_oas.json", token=os.environ["STRIPE_KEY"]
+            file_path="specs/stripe_oas.json", token=os.getenv["STRIPE_KEY"]
         )
 
         headers["Content-Type"] = "application/x-www-form-urlencoded"
         query_example = "Generate a payment link for price_1PS6FEBk0CUtnrfuZYMDDe1q"
+    elif scenario == "monday":
 
+        api_spec, headers = process_spec_file(
+            file_path="specs/monday_oas.json", token=os.getenv("MONDAY_KEY")
+        )
+
+        headers["Content-Type"] = "application/json"
+
+        query_example = (
+            "Get the total duration of my tasks in monday for the board agileloop"
+        )
     else:
         raise ValueError(f"Unsupported scenario: {scenario}")
 

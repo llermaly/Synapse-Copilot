@@ -46,9 +46,7 @@ class ApiLLM(Chain):
         callback_manager: Optional[BaseCallbackManager] = None,
         **kwargs: Any,
     ) -> None:
-        if scenario not in [
-            "stripe",
-        ]:
+        if scenario not in ["stripe", "monday"]:
             raise ValueError(f"Invalid scenario {scenario}")
 
         planner = Planner(llm=llm, scenario=scenario)

@@ -4,7 +4,6 @@ import json
 import logging
 from logging.handlers import BaseRotatingHandler
 from colorama import Fore
-
 from langchain.agents.agent_toolkits.openapi.spec import ReducedOpenAPISpec
 
 
@@ -98,7 +97,7 @@ def fix_json_error(data: str, return_str=True):
     data = data.strip().strip('"').strip(",").strip("`")
 
     if data.startswith("json"):
-        data = data.split("json")[1].strip()
+        data = data[4:]
 
     try:
         json.loads(data)

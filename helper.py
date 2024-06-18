@@ -7,7 +7,7 @@ import yaml
 from base64 import b64encode
 import spotipy
 from req import Requests
-from langchain import OpenAI
+from langchain.llms.openai import OpenAI
 
 from utils import reduce_openapi_spec, ColorPrint
 from model import ApiLLM
@@ -26,6 +26,12 @@ def process_spec_file(
 
     api_spec = reduce_openapi_spec(raw_api_spec, only_required=False)
 
+    if "monday" in file_path:
+        headers = {
+            "Authorization": token,
+        }
+        return api_spec, headers
+
     if "stripe" in file_path:
         credentials = f"{token}:"
         encoded_credentials = base64.b64encode(credentials.encode("utf-8")).decode(
@@ -34,6 +40,7 @@ def process_spec_file(
         headers = {
             "Authorization": f"Basic {encoded_credentials}",
         }
+        return api_spec, headers
 
     if "trello" in file_path:
         params = {"key": key, "token": token}

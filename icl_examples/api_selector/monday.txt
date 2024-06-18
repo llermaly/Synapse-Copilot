@@ -1,0 +1,85 @@
+Example 1:
+Background: No background
+User query: Get the id for the board with name AgileLoop
+API calling 1: POST /v2 with the graphql query = query {
+  boards{
+    id
+    name
+  }
+}
+API response: {
+    "data": {
+        "boards": [
+            {
+                "id": "6842334624",
+                "name": "AgileLoop"
+            }
+        ]
+    },
+    "account_id": 23976820
+}
+
+Example 1:
+Background: No background
+User query: Get the tasks durations in monday for the board with id 6842334624
+API calling 1: POST /v2 with the graphql query = query {
+  boards (ids: 6842334624){
+    allItems:items_page (limit: 10) {
+      cursor
+      items {
+         itemData:column_values {
+          ... on TimeTrackingValue {
+            durationInSeconds:duration
+          }
+        }
+      }
+    }
+  }
+}
+API response: {
+    "data": {
+        "boards": [
+            {
+                "allItems": {
+                    "cursor": null,
+                    "items": [
+                        {
+                            "itemData": [
+                                {},
+                                {},
+                                {},
+                                {},
+                                {
+                                    "durationInSeconds": 3600
+                                }
+                            ]
+                        },
+                        {
+                            "itemData": [
+                                {},
+                                {},
+                                {},
+                                {},
+                                {
+                                    "durationInSeconds": 3600
+                                }
+                            ]
+                        },
+                        {
+                            "itemData": [
+                                {},
+                                {},
+                                {},
+                                {},
+                                {
+                                    "durationInSeconds": 3600
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "account_id": 23976820
+}
