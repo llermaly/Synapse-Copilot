@@ -26,11 +26,18 @@ class ColorPrint:
 
 
 def get_matched_endpoint(api_spec: ReducedOpenAPISpec, plan: str):
-    if "https" not in plan:
-        pattern = r"\b(GET|POST|PATCH|DELETE|PUT)\s+(/\S+)*"
-    else:
-        pattern = r"\b(GET|POST|PATCH|DELETE|PUT)\s+https?://\S+?(/\S+)"
+    pattern = r"\b(GET|POST|PATCH|DELETE|PUT)\s+(/\S+)*"
+
+    # if "https" not in plan:
+    #     pattern = r"\b(GET|POST|PATCH|DELETE|PUT)\s+(/\S+)*"
+    # else:
+    #     pattern = r"\b(GET|POST|PATCH|DELETE|PUT)\s+https?://\S+?(/\S+)"
+
     matches = re.findall(pattern, plan)
+
+    # Remove duplicates from matches, e.g: for graphql the same endpoint is used for multiple tasks and only the request changes
+    matches = list(set(matches))
+
     print(f"UTILS: PLAN 27: {plan}")
     print(f"UTILS: MATCHES 29: {matches}")
     routes = [route for method, route in matches]

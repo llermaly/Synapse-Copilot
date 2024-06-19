@@ -1,0 +1,58 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Send Emails API",
+    "description": "Send Emails using Resend API",
+    "version": "6.0.7-beta",
+    "termsOfService": "https://api.resend.com"
+  },
+  "servers": [
+    {
+      "url": "https://api.resend.com"
+    }
+  ],
+  "paths": {
+    "/emails": {
+      "post": {
+        "tags": ["default"],
+        "summary": "Send Email",
+        "requestBody": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "string",
+                "example": "\"{\\n    \\\"from\\\": \\\"onboarding@resend.dev\\\",\\n    \\\"to\\\": \\\"maxxii.1820@gmail.com\\\",\\n    \\\"subject\\\": \\\"Hello World\\\",\\n    \\\"html\\\": \\\"<p>Congrats on sending your <strong>first email</strong>!</p>\\\"\\n  }\""
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer re_ReL1qsV7_LEaKq2MNa7AlUNWXThNLacep"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

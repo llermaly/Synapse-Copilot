@@ -1,0 +1,8 @@
+Example 1:
+
+User query: Send an email to maxxii.2420@gmail.com with subject "Payment Link" and html "<p>Here is the payment link for the development: https://buy.stripe.com/test_biy4iu9dj2uyefw8wq</p>"
+Plan step 1: Use the resend email api to send the email
+API response: POST /emails with the specified parameters and the default email : dev@fusion-ai-experts.com to send the email
+Thought: I have successfully executed the POST /emails request to send the email. The response contains the id of the email.
+Final Answer: The email has been successfully sent to maxxii.2420@gmail.com. The ID of the send email is "8727e651-0c8b-4a22-a428-501c24a3cf7a".
+

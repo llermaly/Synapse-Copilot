@@ -7,6 +7,10 @@ from dotenv import load_dotenv
 load_dotenv()
 logger = logging.getLogger()
 
+RESEND_KEY = os.getenv("RESEND_KEY")
+STRIPE_KEY = os.getenv("STRIPE_KEY")
+MONDAY_KEY = os.getenv("MONDAY_KEY")
+
 
 def main():
 
@@ -21,24 +25,19 @@ def main():
     scenario = scenario.lower()
     api_spec, headers = None, None
 
-    # database connection details
-    db_config = {
-        "host": "localhost",
-        "database": "synapse-copilot",
-        "user": "root",
-        "password": "",
-    }
-
-    # Connect to the MySQL server
-    # conn = mysql.connector.connect(**db_config)
-    # cursor = conn.cursor()
-
-    # user_id = int(input("Enter the user id: "))
-
-    if scenario == "stripe":
+    if scenario == "resend":
 
         api_spec, headers = process_spec_file(
-            file_path="specs/stripe_oas.json", token=os.getenv["STRIPE_KEY"]
+            file_path="specs/resend_oas.json", token=RESEND_KEY
+        )
+
+        headers["Content-Type"] = "application/json"
+
+        query_example = 'Send an email to maxxii.2420@gmail.com with subject "Payment Link" and html "<p>Here is the payment link for the development: https://buy.stripe.com/test_biy4iu9dj2uyefw8wq</p>"'
+    elif scenario == "stripe":
+
+        api_spec, headers = process_spec_file(
+            file_path="specs/stripe_oas.json", token=STRIPE_KEY
         )
 
         headers["Content-Type"] = "application/x-www-form-urlencoded"
@@ -46,7 +45,7 @@ def main():
     elif scenario == "monday":
 
         api_spec, headers = process_spec_file(
-            file_path="specs/monday_oas.json", token=os.getenv("MONDAY_KEY")
+            file_path="specs/monday_oas.json", token=MONDAY_KEY
         )
 
         headers["Content-Type"] = "application/json"

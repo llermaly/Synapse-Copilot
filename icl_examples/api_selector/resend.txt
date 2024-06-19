@@ -1,0 +1,12 @@
+Example 1:
+Background: No background
+User query: Send an email to maxxii.2420@gmail.com with the subject "Hello World" and html "<p>Congrats on sending your <strong>first email</strong>!</p>"
+API calling 1: POST /emails with request body = {
+"from": "dev@fusion-ai-experts.com",
+"to": "maxxii.2420@gmail.com",
+"subject": "Hello World",
+"html": "<p>Congrats on sending your <strong>first email</strong>!</p>"
+}
+API response: {
+    "id": "8727e651-0c8b-4a22-a428-501c24a3cf7a"
+}

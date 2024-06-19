@@ -26,6 +26,10 @@ def process_spec_file(
 
     api_spec = reduce_openapi_spec(raw_api_spec, only_required=False)
 
+    if "resend" in file_path:
+        headers = {"Authorization": f"Bearer {token}"}
+        return api_spec, headers
+
     if "monday" in file_path:
         headers = {
             "Authorization": token,

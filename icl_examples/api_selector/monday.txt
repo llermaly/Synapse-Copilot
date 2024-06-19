@@ -1,12 +1,12 @@
 Example 1:
 Background: No background
 User query: Get the id for the board with name AgileLoop
-API calling 1: POST /v2 with the graphql query = query {
+API calling 1: POST /v2 with the graphql query = "query {
   boards{
     id
     name
   }
-}
+}"
 API response: {
     "data": {
         "boards": [
@@ -22,12 +22,12 @@ API response: {
 Example 1:
 Background: No background
 User query: Get the tasks durations in monday for the board with id 6842334624
-API calling 1: POST /v2 with the graphql query = query {
+API calling 1: POST /v2 with the graphql query = "query {
   boards (ids: 6842334624){
-    allItems:items_page (limit: 10) {
+    items_page (limit: 10) {
       cursor
       items {
-         itemData:column_values {
+         column_values {
           ... on TimeTrackingValue {
             durationInSeconds:duration
           }
@@ -35,16 +35,16 @@ API calling 1: POST /v2 with the graphql query = query {
       }
     }
   }
-}
+}"
 API response: {
     "data": {
         "boards": [
             {
-                "allItems": {
+                "items_page": {
                     "cursor": null,
                     "items": [
                         {
-                            "itemData": [
+                            "column_values": [
                                 {},
                                 {},
                                 {},
@@ -55,7 +55,7 @@ API response: {
                             ]
                         },
                         {
-                            "itemData": [
+                            "column_values": [
                                 {},
                                 {},
                                 {},
@@ -66,7 +66,7 @@ API response: {
                             ]
                         },
                         {
-                            "itemData": [
+                            "column_values": [
                                 {},
                                 {},
                                 {},
