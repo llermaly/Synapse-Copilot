@@ -12,6 +12,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 STRIPE_KEY = os.getenv("STRIPE_KEY")
 MONDAY_KEY = os.getenv("MONDAY_KEY")
 RESEND_KEY = os.getenv("RESEND_KEY")
+SLACK_KEY = os.getenv("SLACK_KEY")
 
 
 logger = logging.getLogger()
@@ -32,9 +33,19 @@ class QueryData(BaseModel):
     query: str
 
 
+class QueryWithScenarioData(BaseModel):
+    query: str
+    scenario: str
+
+
 @app.get("/ping")
 def ping():
     return {"ok": True}
+
+
+@app.post("/query_with_scenario")
+def run_query(data: QueryWithScenarioData):
+    return {"result": run_scenario(data.query, scenario=data.scenario)}
 
 
 @app.post("/query")
@@ -46,16 +57,17 @@ def run_query(data: QueryData):
         scenario = "stripe"
     elif "monday" in data.query.lower():
         scenario = "monday"
+    elif "slack" in data.query.lower():
+        scenario = "slack"
     else:
         return {
-            "result": "Unsupported scenario, please specify either stripe or monday"
+            "result": "Unsupported scenario, please specify either stripe,monday,email,slack"
         }
 
     return {"result": run_scenario(data.query, scenario=scenario)}
 
 
 def run_scenario(query: str, scenario: str):
-
     if scenario == "resend":
         api_spec, headers = process_spec_file(
             file_path="specs/resend_oas.json", token=RESEND_KEY
@@ -65,6 +77,12 @@ def run_scenario(query: str, scenario: str):
     elif scenario == "stripe":
         api_spec, headers = process_spec_file(
             file_path="specs/stripe_oas.json", token=STRIPE_KEY
+        )
+
+        headers["Content-Type"] = "application/x-www-form-urlencoded"
+    elif scenario == "slack":
+        api_spec, headers = process_spec_file(
+            file_path="specs/slack_oas.json", token=SLACK_KEY
         )
 
         headers["Content-Type"] = "application/x-www-form-urlencoded"

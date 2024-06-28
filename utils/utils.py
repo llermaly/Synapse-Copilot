@@ -106,6 +106,10 @@ def fix_json_error(data: str, return_str=True):
     if data.startswith("json"):
         data = data[4:]
 
+    print("------DATA------")
+    print(data)
+    print("------DATA------")
+
     try:
         json.loads(data)
         return data
