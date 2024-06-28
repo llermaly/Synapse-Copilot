@@ -1,0 +1,48 @@
+Example 1:
+Background: No background
+User query: Send message to the general channel with the text "hola"
+API calling 1: POST /api/chat.postMessage with channel = "general" and text = "hola"
+API response: {
+    "ok": true,
+    "channel": "C079SE4MY1G",
+    "ts": "1719606352.679019",
+    "message": {
+        "user": "U07A54VA141",
+        "type": "message",
+        "ts": "1719606352.679019",
+        "bot_id": "B079BTNAXN3",
+        "app_id": "A079BTFHKRD",
+        "text": "hola",
+        "team": "T079SASC6CT",
+        "bot_profile": {
+            "id": "B079BTNAXN3",
+            "app_id": "A079BTFHKRD",
+            "name": "AGILE LOOP",
+            "icons": {
+                "image_36": "https://a.slack-edge.com/80588/img/plugins/app/bot_36.png",
+                "image_48": "https://a.slack-edge.com/80588/img/plugins/app/bot_48.png",
+                "image_72": "https://a.slack-edge.com/80588/img/plugins/app/service_72.png"
+            },
+            "deleted": false,
+            "updated": 1719369015,
+            "team_id": "T079SASC6CT"
+        },
+        "blocks": [
+            {
+                "type": "rich_text",
+                "block_id": "AkK4Y",
+                "elements": [
+                    {
+                        "type": "rich_text_section",
+                        "elements": [
+                            {
+                                "type": "text",
+                                "text": "hola"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

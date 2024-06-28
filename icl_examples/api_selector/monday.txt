@@ -19,7 +19,7 @@ API response: {
     "account_id": 23976820
 }
 
-Example 1:
+Example 2:
 Background: No background
 User query: Get the tasks durations in monday for the board with id 6842334624
 API calling 1: POST /v2 with the graphql query = "query {

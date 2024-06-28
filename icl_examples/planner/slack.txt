@@ -1,0 +1,8 @@
+Example 1:
+
+User query: Send a message to the general channel saying "Hello guys the meeting is in 2 hours"
+Plan step 1: Use the slack api to send the message
+API response: POST /api/chat.postMessage with the specified parameters
+Thought: I have successfully executed the POST /api/chat.postMessage request to send the message
+Final Answer: The message has been sent succesfully
+

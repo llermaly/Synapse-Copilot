@@ -10,6 +10,7 @@ logger = logging.getLogger()
 RESEND_KEY = os.getenv("RESEND_KEY")
 STRIPE_KEY = os.getenv("STRIPE_KEY")
 MONDAY_KEY = os.getenv("MONDAY_KEY")
+SLACK_KEY = os.getenv("SLACK_KEY")
 
 
 def main():
@@ -20,7 +21,7 @@ def main():
     )
     logger.setLevel(logging.INFO)
 
-    scenario = input("Please select a scenario (stripe): ")
+    scenario = input("Please select a scenario (stripe,monday,slack,resend): ")
 
     scenario = scenario.lower()
     api_spec, headers = None, None
@@ -42,6 +43,14 @@ def main():
 
         headers["Content-Type"] = "application/x-www-form-urlencoded"
         query_example = "Generate a payment link for price_1PS6FEBk0CUtnrfuZYMDDe1q"
+    elif scenario == "slack":
+
+        api_spec, headers = process_spec_file(
+            file_path="specs/slack_oas.json", token=SLACK_KEY
+        )
+
+        headers["Content-Type"] = "application/x-www-form-urlencoded"
+        query_example = "Send a message to the general channel saying 'hello guys'"
     elif scenario == "monday":
 
         api_spec, headers = process_spec_file(
