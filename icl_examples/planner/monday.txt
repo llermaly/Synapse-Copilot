@@ -13,17 +13,21 @@ API response: The board id of the product "AgileLoop" is "6842334624"
 Plan step 3: Get the tasks durations in monday for the board with id 6842334624
 API response: POST /v2 with the graphql query = "query {
   boards (ids: 6842334624){
-    items_page (limit: 10) {
+    allItems:items_page (limit: 10) {
       cursor
       items {
-         column_values {
-          ... on TimeTrackingValue {
-            durationInSeconds:duration
+        id
+        name
+         itemData:column_values {
+          column{
+            title
           }
+          text
         }
       }
     }
   }
-}" to get all the tasks duration of the board with id 6842334624
-Thought: I have successfully executed the POST request to get the tasks with the time durations, the response contains the duration of each tasks and I will return the sum of all.
-Final Answer: The total duration of your tasks in monday is 7200seconds which is 2 hours.
+}" to get all the tasks information of the board with id 6842334624
+Plan Step 4: I have all the tasks information, now I will look for the text of column with title "Timeline" and use these timelines to calculate the tasks durations
+Thought: I have successfully executed the POST request to get the tasks with their information and have aggregate succesfully the timelines to return the tasks durations.
+Final Answer: The total duration of your tasks in monday is 6 days.
