@@ -31,3 +31,55 @@ API response: POST /v2 with the graphql query = "query {
 Plan Step 4: I have all the tasks information, now I will look for the text of column with title "Timeline" and use these timelines to calculate the tasks durations
 Thought: I have successfully executed the POST request to get the tasks with their information and have aggregate succesfully the timelines to return the tasks durations.
 Final Answer: The total duration of your tasks in monday is 6 days.
+
+Example 2:
+
+User query: Which items are stuck in AgileLoop board ?
+Plan step 1: Get the id of the board with name AgileLoop
+API response: POST /v2 with the graphql query = query {
+  boards{
+    id
+    name
+  }
+} to get all the boards
+Plan step 2: Continue. Extract the board id for the board with name "AgileLoop".
+API response: The board id of the product "AgileLoop" is "6842334624"
+Plan step 3: Get the updates for stuck tasks in monday for the board with id 6842334624
+FOR compare_value use values:
+0: Working on it 
+1: Done
+2: Stuck
+If Query don't specify a status, just put [0,1,2] as compare_value
+API response: POST /v2 with the graphql query = "query {
+  boards(ids: 6842334624) {
+    allItems: items_page(
+      limit: 10
+      query_params: {rules: [{column_id: "project_status", compare_value: [2]}]}
+    ) {
+      cursor
+      items {
+        id
+        name
+        itemData: column_values {
+          column {
+            id
+            title
+          }
+          text
+        }
+        creator {
+          email
+        }
+        updates {
+          text_body
+          created_at
+          creator {
+            name
+          }
+        }
+      }
+    }
+  }
+}" to get all the tasks information of the board with id 6842334624
+I will read the selected items, and summarize the updates of each one in a verbose way that includes creator name.
+Answer in a pretty markdown format.

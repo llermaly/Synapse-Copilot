@@ -1,6 +1,11 @@
 Example 1:
 Background: No background
-User query: Send message to the general channel with the text "hola"
+User query: Send message to the general channel with the text "hola @gustavo"
+For mentions (@user) use the slack format <@USER_ID>, using the following ids: 
+gustavo: U07A54AFZRP
+maximiliano: U079PH99WAZ
+If the user mentioned is not in the list keep the mention as it is.
+Use slack markdown format when you detect markdown in the message.
 API calling 1: POST /api/chat.postMessage with channel = "general" and text = "hola"
 API response: {
     "ok": true,
@@ -37,9 +42,19 @@ API response: {
                         "elements": [
                             {
                                 "type": "text",
-                                "text": "hola"
+                                "text": "hola <@U07A54AFZRP>"
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                "type": "section",
+                "block_id": "section789",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": "*Average Rating*\n1.0"
                     }
                 ]
             }

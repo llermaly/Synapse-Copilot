@@ -20,7 +20,7 @@ API response: {
 }
 
 Example 2:
-Background: No background
+Background: Agileloop board id is 6842334624
 User query: Get the tasks durations in monday for the board with id 6842334624
 API calling 1: POST /v2 with the graphql query = "query {
   boards (ids: 6842334624){
@@ -75,67 +75,60 @@ API response: {
                   "text": "2024-06-24 - 2024-06-26"
                 }
               ]
-            },
-            {
-              "id": "6842334678",
-              "name": "Tarea 2",
-              "itemData": [
-                {
-                  "column": {
-                    "title": "Owner"
-                  },
-                  "text": "Gustavo Llermaly"
-                },
-                {
-                  "column": {
-                    "title": "Status"
-                  },
-                  "text": "Done"
-                },
-                {
-                  "column": {
-                    "title": "Due date"
-                  },
-                  "text": "2024-06-14"
-                },
-                {
-                  "column": {
-                    "title": "Timeline"
-                  },
-                  "text": "2024-06-11 - 2024-06-14"
-                }
-              ]
-            },
-            {
-              "id": "6842334668",
-              "name": "Tarea 3",
-              "itemData": [
-                {
-                  "column": {
-                    "title": "Owner"
-                  },
-                  "text": "Gustavo Llermaly"
-                },
-                {
-                  "column": {
-                    "title": "Status"
-                  },
-                  "text": "Done"
-                },
-                {
-                  "column": {
-                    "title": "Due date"
-                  },
-                  "text": "2024-06-12"
-                },
-                {
-                  "column": {
-                    "title": "Timeline"
-                  },
-                  "text": "2024-06-10 - 2024-06-12"
-                }
-              ]
-            },
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "account_id": 23976820
+}
+Example 3:
+Background: Agileloop board id is 6842334624
+User query: Get the stuck status items and updates for the board with id 6842334624
+API calling 1: 
+FOR compare_value use values:
+0: Working on it 
+1: Done
+2: Stuck
+If Query don't specify a status, just put [0,1,2] as compare_value
+POST /v2 with the graphql query = "query {
+  boards (ids: 6842334624){
+    allItems:items_page (
+      limit: 10
+      query_params: {rules: [{column_id: "project_status", compare_value: [2]}]}
+    ) {
+      cursor
+      items {
+        id
+        name
+         itemData:column_values {
+          column{
+            title
+          }
+          text
+        }
+        creator {
+          email
+        }
+        updates {
+          text_body
+          created_at
+          creator {
+            name
+          }
+        }
+      }
+    }
+  }
+}"
+API response: {
+  "data": {
+    "boards": [
+      {
+        "allItems": {
+          "cursor": null,
+          "items": [
             {
               "id": "6842334675",
               "name": "Tarea 4",
@@ -164,95 +157,11 @@ API response: {
                   },
                   "text": "2024-06-17 - 2024-06-20"
                 }
-              ]
-            },
-            {
-              "id": "6897643948",
-              "name": "Tarea 5",
-              "itemData": [
+              ],
+              "updates": [
                 {
-                  "column": {
-                    "title": "Owner"
-                  },
-                  "text": "valentina@llermaly.com"
-                },
-                {
-                  "column": {
-                    "title": "Status"
-                  },
-                  "text": "Not Started"
-                },
-                {
-                  "column": {
-                    "title": "Due date"
-                  },
-                  "text": "2024-06-27"
-                },
-                {
-                  "column": {
-                    "title": "Timeline"
-                  },
-                  "text": "2024-06-26 - 2024-06-27"
-                }
-              ]
-            },
-            {
-              "id": "6897785848",
-              "name": "Tarea 6",
-              "itemData": [
-                {
-                  "column": {
-                    "title": "Owner"
-                  },
-                  "text": "Paula Micheli"
-                },
-                {
-                  "column": {
-                    "title": "Status"
-                  },
-                  "text": "Done"
-                },
-                {
-                  "column": {
-                    "title": "Due date"
-                  },
-                  "text": ""
-                },
-                {
-                  "column": {
-                    "title": "Timeline"
-                  },
-                  "text": "2024-06-20 - 2024-06-24"
-                }
-              ]
-            },
-            {
-              "id": "6898107196",
-              "name": "Tarea 7",
-              "itemData": [
-                {
-                  "column": {
-                    "title": "Owner"
-                  },
-                  "text": "valentina@llermaly.com"
-                },
-                {
-                  "column": {
-                    "title": "Status"
-                  },
-                  "text": "Working on it"
-                },
-                {
-                  "column": {
-                    "title": "Due date"
-                  },
-                  "text": ""
-                },
-                {
-                  "column": {
-                    "title": "Timeline"
-                  },
-                  "text": "2024-06-24 - 2024-06-26"
+                  "id": "3261513743",
+                  "text_body": "Sorry I'm stuck because I need security credentials."
                 }
               ]
             }
